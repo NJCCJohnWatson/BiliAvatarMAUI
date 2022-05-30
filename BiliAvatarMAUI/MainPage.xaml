@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:drawable="clr-namespace:BiliAvatarMAUI"
+             x:Class="BiliAvatarMAUI.MainPage">
+    <!--<ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Quit" Command="{Binding QuitCommand}"/>
+        </MenuBarItem>
+        <MenuBarItem Text="Locations">
+            <MenuFlyoutSubItem Text="Change Location">
+                <MenuFlyoutItem Text="Boston, MA"/>
+                <MenuFlyoutItem Text="Redmond, WA"/>
+                <MenuFlyoutItem Text="St. Louis, MO"/>
+            </MenuFlyoutSubItem>
+            <MenuFlyoutItem Text="Add a Location" Command="{Binding AddLocationCommand}"/>
+        </MenuBarItem>
+        <MenuBarItem Text="View">
+            <MenuFlyoutItem Text="Refresh" Command="{Binding RefreshCommand}"/>
+            <MenuFlyoutItem Text="Toggle Light/Dark Mode" Command="{Binding ToggleModeCommand}"/>
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>-->
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30">
+            <Label 
+                Text="MAUI CrossPlatform TikTok Donwloader"
+                SemanticProperties.HeadingLevel="Level1"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Current count: 0"
+                FontSize="18"
+                FontAttributes="Bold"
+                x:Name="CounterLabel"
+                HorizontalOptions="Center" />
+            <Editor             
+                x:Name="txtLink"
+                HorizontalOptions="FillAndExpand" 
+                AutoSize="TextChanges"
+                MinimumWidthRequest="120"/>
+            <Button
+                Clicked="GetLink"
+                FontAttributes="Bold"          
+                HorizontalOptions="Start"                 
+                Text="获取链接"                
+                />
+            <Button
+                Clicked="SetDownloadPath"
+                FontAttributes="Bold"          
+                HorizontalOptions="Start"                 
+                Text="设置Path"                
+                />
+            <Button 
+                Text="Click me"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Start" 
+                x:Name="btn_Click"/>
+            <Button 
+                Text="Click me"
+                FontAttributes="Bold"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnClickLoadUrl"
+                HorizontalOptions="Start" Margin="20,0,0,0"/>
+            <Editor
+            HorizontalOptions="Fill"
+                x:Name="txtServerAdress"
+                AutoSize="TextChanges"/>
+
+            <Image
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                WidthRequest="250"
+                HeightRequest="310"
+                HorizontalOptions="Center" 
+                x:Name="imgDy"
+                IsVisible="False"/>
+
+            <Label x:Name="suckLabel"
+                Text="欣小萌大烧杯！"
+                HorizontalOptions="Center"
+                FontSize="Large"/>
+            <Label x:Name="lbl_BitchyDeg"
+                Text=""
+                HorizontalOptions="Center"
+                FontSize="Large"
+                TextDecorations="Strikethrough"
+                />
+            <Slider x:Name="sld_BitchDeg" 
+                    Maximum="360" 
+                    VerticalOptions="Center"/>
+            <Image 
+                x:Name="img_ShowToppic"
+                HorizontalOptions="Center" 
+                VerticalOptions="End" 
+                MaximumHeightRequest="300" 
+                IsVisible="False"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
