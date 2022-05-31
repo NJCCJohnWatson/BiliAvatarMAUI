@@ -22,11 +22,11 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
-        suckLabel.BindingContext = sld_BitchDeg;
-        suckLabel.SetBinding(Label.RotationProperty, "Value");
-        lbl_BitchyDeg.BindingContext = sld_BitchDeg;
-        lbl_BitchyDeg.SetBinding(Label.TextProperty, "Value");
-        imgDy.Source = "dage.jpg";
+        //suckLabel.BindingContext = sld_BitchDeg;
+        //suckLabel.SetBinding(Label.RotationProperty, "Value");
+        //lbl_BitchyDeg.BindingContext = sld_BitchDeg;
+        //lbl_BitchyDeg.SetBinding(Label.TextProperty, "Value");
+        //imgDy.Source = "dage.jpg";
     }
 
     private void OnCounterClicked(object sender, EventArgs e)
@@ -71,7 +71,7 @@ public partial class MainPage : ContentPage
         img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
     }
 
-    private void GetLink(object sender, EventArgs e)
+    private async void GetLink(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(txtServerAdress.Text))
         {
@@ -87,7 +87,7 @@ public partial class MainPage : ContentPage
         else
         {
             string serrverIP = txtServerAdress.Text;
-            string apiUrl = (serrverIP + "/api?url=\"" + linkText + "\"");
+            string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
             var videoInfo = douyin.GetVideoInfoByApi(apiUrl);
             #region Construct video file name
             string video1080p = string.Empty;
@@ -129,7 +129,7 @@ public partial class MainPage : ContentPage
             if (IsAndroid())
             {
                 var Movies = FileSystem.Current.AppDataDirectory;
-                savingPath = @"/storage/emulated/0/Pictures/DouyinDownload";
+                //savingPath = @"/storage/emulated/0/Pictures";
                 if (!Directory.Exists(savingPath))
                 {
                     savingPath = Movies;
@@ -148,8 +148,16 @@ public partial class MainPage : ContentPage
             string filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoTitle + ".mp4");
             //FileIO.WriteBinaryToFile(filepath, resp);
             //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
-            douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
-            CounterLabel.Text = "下载成功：" + filepath;
+            bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
+            if (result)
+            {
+                CounterLabel.Text = "下载成功：" + filepath;
+                txtLink.Text = "";
+            }
+            else
+            {
+                CounterLabel.Text = "下载失败，请检查链接";
+            }
         }
     }
 
@@ -158,7 +166,26 @@ public partial class MainPage : ContentPage
         FileSys fs = new FileSys();
         string path = await fs.TakePath();
         CounterLabel.Text = path;
-        //savingPath = path;
+        FileInfo fi = new FileInfo(path);
+        var realPath = fi.Directory;
+        savingPath = path;
+    }
+    private void ContentPage_Loaded(object sender, EventArgs e)
+    {
+        Clipboard.Default.ClipboardContentChanged += Clipboard_ClipboardContentChanged;
+    }
+    private async void Clipboard_ClipboardContentChanged(object sender, EventArgs e)
+    {
+        var clipBoardText = await Clipboard.Default.GetTextAsync();
+    }
+
+    private  void ContentPage_Focused(object sender, FocusEventArgs e)
+    {
+        
+    }
+    private async void Clipboard_ClipboardContainTiktokLink(object sender, EventArgs e)
+    {
+        var clipBoardText = await Clipboard.Default.GetTextAsync();
     }
 }
 
