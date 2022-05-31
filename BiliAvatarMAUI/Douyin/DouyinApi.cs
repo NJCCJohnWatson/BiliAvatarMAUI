@@ -14,11 +14,32 @@ namespace BiliAvatarMAUI.Douyin
         HttpClient _client = new HttpClient();
 
         public HttpClient Client { get => _client; set => _client = value; }
+        public FileSys Fs { get => fs; set => fs = value; }
 
-        public void DownloadVideo(string url,string filepath)
+        FileSys fs = new FileSys();
+
+        public async Task<bool> DownloadVideo(string url, string filepath)
         {
-            var resp = Client.GetByteArrayAsync(url).Result;           
-            FileIO.WriteBinaryToFile(filepath, resp);
+            string error = string.Empty;
+            if (!string.IsNullOrEmpty(url))
+            {
+                try
+                {
+                    var resp = await Client.GetByteArrayAsync(url);
+                    //FileIO.WriteBinaryToFile(filepath, resp);
+                    await Fs.WriteBinaryToFile(filepath, resp);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public dynamic GetVideoInfoByApi(string url)

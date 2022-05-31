@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:drawable="clr-namespace:BiliAvatarMAUI"
-             x:Class="BiliAvatarMAUI.MainPage">
+             x:Class="BiliAvatarMAUI.MainPage" 
+             Loaded="ContentPage_Loaded"
+             Focused="ContentPage_Focused">
     <!--<ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
             <MenuFlyoutItem Text="Quit" Command="{Binding QuitCommand}"/>
@@ -69,8 +71,8 @@
             <Editor
             HorizontalOptions="Fill"
                 x:Name="txtServerAdress"
-                AutoSize="TextChanges"/>
-
+                AutoSize="TextChanges"
+                />
             <Image
                 SemanticProperties.Description="Cute dot net bot waving hi to you!"
                 WidthRequest="250"
@@ -79,7 +81,7 @@
                 x:Name="imgDy"
                 IsVisible="False"/>
 
-            <Label x:Name="suckLabel"
+            <!--<Label x:Name="suckLabel"
                 Text="欣小萌大烧杯！"
                 HorizontalOptions="Center"
                 FontSize="Large"/>
@@ -91,7 +93,7 @@
                 />
             <Slider x:Name="sld_BitchDeg" 
                     Maximum="360" 
-                    VerticalOptions="Center"/>
+                    VerticalOptions="Center"/>-->
             <Image 
                 x:Name="img_ShowToppic"
                 HorizontalOptions="Center" 

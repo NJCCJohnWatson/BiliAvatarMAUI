@@ -13,7 +13,7 @@ namespace BiliAvatarMAUI
             using (FileStream fs = File.Open(filepath, FileMode.OpenOrCreate))
             {
                 fs.Seek(0, SeekOrigin.End);
-                fs.Write(bytes);
+                fs.WriteAsync(bytes);
             }
         }
         public static async void TakePhoto()
@@ -33,10 +33,19 @@ namespace BiliAvatarMAUI
                     await sourceStream.CopyToAsync(localFileStream);
                 }
             }
-        }        
+        }
     }
     public class FileSys
     {
+        public async Task<bool> WriteBinaryToFile(string filepath, byte[] bytes)
+        {
+            using (FileStream fs = File.Open(filepath, FileMode.OpenOrCreate))
+            {
+                fs.Seek(0, SeekOrigin.End);
+                await fs.WriteAsync(bytes);
+                return true;
+            }
+        }
         public async Task<string> TakePath()
         {
             if (MediaPicker.Default.IsCaptureSupported)
