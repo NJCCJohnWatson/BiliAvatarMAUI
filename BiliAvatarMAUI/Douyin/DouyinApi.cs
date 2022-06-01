@@ -42,9 +42,9 @@ namespace BiliAvatarMAUI.Douyin
 
         }
 
-        public dynamic GetVideoInfoByApi(string url)
+        public async Task<dynamic> GetVideoInfoByApi(string url)
         {
-            var responseStr = Client.GetStringAsync(url).Result;
+            var responseStr = await Client.GetStringAsync(url);
             var converter = new ExpandoObjectConverter();
             dynamic obj = JsonConvert.DeserializeObject<ExpandoObject>(responseStr, converter);
             return obj;
