@@ -88,7 +88,7 @@ public partial class MainPage : ContentPage
         {
             string serrverIP = txtServerAdress.Text;
             string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
-            var videoInfo = douyin.GetVideoInfoByApi(apiUrl);
+            var videoInfo = await douyin.GetVideoInfoByApi(apiUrl);
             #region Construct video file name
             string video1080p = string.Empty;
             string videoUrl = string.Empty;
