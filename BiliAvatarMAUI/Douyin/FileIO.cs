@@ -40,7 +40,7 @@ namespace BiliAvatarMAUI
             {
                 return "";
             }
-        }        
+        }
     }
     public static class Verify
     {
@@ -55,7 +55,15 @@ namespace BiliAvatarMAUI
                     filname.Remove(illegalchar);
                 }
             }
-            return filname;
+            return ReplaceIlleageChacters(filname);
+        }
+        public static string ReplaceIlleageChacters(string name)
+        {
+            if (name.Contains('?'))
+            {
+                name = name.Replace("?", "？");
+            }
+            return name;
         }
     }
 }
