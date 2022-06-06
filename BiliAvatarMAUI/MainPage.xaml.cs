@@ -73,12 +73,6 @@ public partial class MainPage : ContentPage
 
     private async void GetLink(object sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(txtServerAdress.Text))
-        {
-            CounterLabel.Text = "服务器IP未设置！";
-            return;
-        }
-
         var linkText = txtLink.Text;
         if (linkText == null || string.IsNullOrWhiteSpace(linkText))
         {
@@ -87,37 +81,56 @@ public partial class MainPage : ContentPage
         else
         {
             string serrverIP = txtServerAdress.Text;
-            string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
-            var videoInfo = await douyin.GetVideoInfoByApi(apiUrl);
+            //string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
+            var videoInfo = await douyin.GetVideoInfoByApi(linkText);
+            //如果返回Json对象为空则跳出
+            if (videoInfo == null)
+            {
+                CounterLabel.Text = "链接获取失败，请检查分享链接"; 
+                return;
+            }
             #region Construct video file name
             string video1080p = string.Empty;
             string videoUrl = string.Empty;
             string authorName = string.Empty;
             string authorUid = string.Empty;
             string videoTitle = string.Empty;
-            foreach (var item in videoInfo)
-            {
-                if (item.Key.Contains("nwm_video_url_1080p"))
-                {
-                    video1080p = item.Value;
-                }
-                if (item.Key.Contains("nwm_video_url") && item.Key == "nwm_video_url")
-                {
-                    videoUrl = item.Value;
-                }
-                if (item.Key.Contains("video_author_uid"))
-                {
-                    authorUid = item.Value;
-                }
-                if (item.Key.Contains("video_author") && item.Key == "video_author")
-                {
-                    authorName = item.Value;
-                }
-                if (item.Key.Contains("video_title"))
-                {
-                    videoTitle = item.Value;
-                }
-            }
+
+            video1080p = videoInfo.item_list[0].video.play_addr.url_list[0];
+            video1080p = video1080p.Replace("playwm", "play");
+            video1080p = video1080p.Replace("720p","1080p");
+            //var resp = douyin.WebIO.GetUrl(video1080p);
+
+            videoUrl = videoInfo.item_list[0].video.play_addr.url_list[0].Replace("playwm", "play");
+
+            authorUid = videoInfo.item_list[0].author_user_id.ToString();
+
+            authorName = videoInfo.item_list[0].author.nickname;
+
+            videoTitle = videoInfo.item_list[0].desc;
+            //foreach (var item in videoInfo)
+            //{
+            //    if (item.Key.Contains("nwm_video_url_1080p"))
+            //    {
+            //        video1080p = item.Value;
+            //    }
+            //    if (item.Key.Contains("nwm_video_url") && item.Key == "nwm_video_url")
+            //    {
+            //        videoUrl = item.Value;
+            //    }
+            //    if (item.Key.Contains("video_author_uid"))
+            //    {
+            //        authorUid = item.Value;
+            //    }
+            //    if (item.Key.Contains("video_author") && item.Key == "video_author")
+            //    {
+            //        authorName = item.Value;
+            //    }
+            //    if (item.Key.Contains("video_title"))
+            //    {
+            //        videoTitle = item.Value;
+            //    }
+            //}
             #endregion
             //string picpath = FileIO.TakePath().Result;
             var MyPictures = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
@@ -146,6 +159,7 @@ public partial class MainPage : ContentPage
 
             }
             string filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoTitle + ".mp4");
+            filepath = Verify.FilterillegalCharacters(filepath);
             //FileIO.WriteBinaryToFile(filepath, resp);
             //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
             bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
@@ -163,7 +177,7 @@ public partial class MainPage : ContentPage
 
     private async void SetDownloadPath(object sender, EventArgs e)
     {
-        FileSys fs = new FileSys();
+        FileIO fs = new FileIO();
         string path = await fs.TakePath();
         CounterLabel.Text = path;
         FileInfo fi = new FileInfo(path);
