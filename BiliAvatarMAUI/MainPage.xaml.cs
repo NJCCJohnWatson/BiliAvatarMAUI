@@ -50,18 +50,19 @@ public partial class MainPage : ContentPage
     }
     private void LoadImageLocal(string path, Image img)
     {
-        string curExePath = Environment.ProcessPath;
-        var exeFi = new FileInfo(curExePath);
-        var curPath = exeFi.Directory.FullName;
-        var assetsPath = Path.Combine(curPath, "Assets");
-        var isAssetsPathExists = Directory.Exists(assetsPath);
+        //string curExePath = Environment.ProcessPath;
+        //var exeFi = new FileInfo(curExePath);
+        //var curPath = exeFi.Directory.FullName;
+        //var assetsPath = Path.Combine(curPath, "Assets");
+        //var isAssetsPathExists = Directory.Exists(assetsPath);
         //var picturePath = Path.Combine(assetsPath, "xxmchain.jpg");
-        //var byteArray = File.ReadAllBytes(picturePath);
-        //img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
-        //img = new Image
-        //{
-        //    Source = ImageSource.FromFile("dage.jpg")
-        //};
+        var byteArray = File.ReadAllBytes(path);
+        img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
+        //both can use, just for test
+        img = new Image
+        {
+            Source = ImageSource.FromFile(path)
+        };
         //var s = File.Exists("BiliAvatarMAUI.Assets.xxmchain.jpg");
 
     }

@@ -55,22 +55,6 @@ namespace BiliAvatarMAUI
                     filname.Remove(illegalchar);
                 }
             }
-            return filname;
-        }
-    }
-    public static class Verify
-    {
-        public static string FilterillegalCharacters(string filname)
-        {
-            char[] illegalchars = Path.GetInvalidFileNameChars();
-            var filenameChars = filname.ToCharArray();
-            foreach (var illegalchar in illegalchars)
-            {
-                if (filname.Contains(illegalchar))
-                {
-                    filname.Remove(illegalchar);
-                }
-            }
             return ReplaceIlleageChacters(filname);
         }
         public static string ReplaceIlleageChacters(string name)
