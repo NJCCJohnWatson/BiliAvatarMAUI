@@ -50,18 +50,19 @@ public partial class MainPage : ContentPage
     }
     private void LoadImageLocal(string path, Image img)
     {
-        string curExePath = Environment.ProcessPath;
-        var exeFi = new FileInfo(curExePath);
-        var curPath = exeFi.Directory.FullName;
-        var assetsPath = Path.Combine(curPath, "Assets");
-        var isAssetsPathExists = Directory.Exists(assetsPath);
+        //string curExePath = Environment.ProcessPath;
+        //var exeFi = new FileInfo(curExePath);
+        //var curPath = exeFi.Directory.FullName;
+        //var assetsPath = Path.Combine(curPath, "Assets");
+        //var isAssetsPathExists = Directory.Exists(assetsPath);
         //var picturePath = Path.Combine(assetsPath, "xxmchain.jpg");
-        //var byteArray = File.ReadAllBytes(picturePath);
-        //img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
-        //img = new Image
-        //{
-        //    Source = ImageSource.FromFile("dage.jpg")
-        //};
+        var byteArray = File.ReadAllBytes(path);
+        img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
+        //both can use, just for test
+        img = new Image
+        {
+            Source = ImageSource.FromFile(path)
+        };
         //var s = File.Exists("BiliAvatarMAUI.Assets.xxmchain.jpg");
 
     }
@@ -80,13 +81,13 @@ public partial class MainPage : ContentPage
         }
         else
         {
-            string serrverIP = txtServerAdress.Text;
+            //string serrverIP = txtServerAdress.Text;
             //string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
             var videoInfo = await douyin.GetVideoInfoByApi(linkText);
             //如果返回Json对象为空则跳出
             if (videoInfo == null)
             {
-                CounterLabel.Text = "链接获取失败，请检查分享链接"; 
+                CounterLabel.Text = "链接获取失败，请检查分享链接";
                 return;
             }
             #region Construct video file name
@@ -95,10 +96,11 @@ public partial class MainPage : ContentPage
             string authorName = string.Empty;
             string authorUid = string.Empty;
             string videoTitle = string.Empty;
+            string videoUid = string.Empty;
 
             video1080p = videoInfo.item_list[0].video.play_addr.url_list[0];
             video1080p = video1080p.Replace("playwm", "play");
-            video1080p = video1080p.Replace("720p","1080p");
+            video1080p = video1080p.Replace("720p", "1080p");
             //var resp = douyin.WebIO.GetUrl(video1080p);
 
             videoUrl = videoInfo.item_list[0].video.play_addr.url_list[0].Replace("playwm", "play");
@@ -108,6 +110,8 @@ public partial class MainPage : ContentPage
             authorName = videoInfo.item_list[0].author.nickname;
 
             videoTitle = videoInfo.item_list[0].desc;
+
+            videoUid = videoInfo.item_list[0].video.vid.ToString();
             //foreach (var item in videoInfo)
             //{
             //    if (item.Key.Contains("nwm_video_url_1080p"))
@@ -145,6 +149,12 @@ public partial class MainPage : ContentPage
                 //savingPath = @"/storage/emulated/0/Pictures";
                 if (!Directory.Exists(savingPath))
                 {
+                    //var folderSave = Directory.CreateDirectory(Path.Combine(savingPath, "save"));
+                    //var files = Directory.EnumerateFiles(savingPath);
+                    //foreach (var brokeVideo in files)
+                    //{
+                    //    //File.Copy(brokeVideo,)
+                    //}
                     savingPath = Movies;
                 }
             }
@@ -158,19 +168,30 @@ public partial class MainPage : ContentPage
                 }
 
             }
-            string filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoTitle + ".mp4");
-            filepath = Verify.FilterillegalCharacters(filepath);
+            authorName = Verify.FilterillegalCharacters(authorName);
+            videoTitle = Verify.FilterillegalCharacters(videoTitle);
+            string filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + ".mp4");
+            //filepath = Verify.FilterillegalCharacters(filepath);
+
             //FileIO.WriteBinaryToFile(filepath, resp);
             //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
-            bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
-            if (result)
+            if (!File.Exists(filepath))
             {
-                CounterLabel.Text = "下载成功：" + filepath;
-                txtLink.Text = "";
+                bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
+                if (result)
+                {
+                    CounterLabel.Text = "下载成功：" + filepath;
+                    txtLink.Text = "";
+                }
+                else
+                {
+                    CounterLabel.Text = "下载失败，请检查链接";
+                }
             }
-            else
+           else
             {
-                CounterLabel.Text = "下载失败，请检查链接";
+                CounterLabel.Text = "该视频下载已完成";
+                txtLink.Text = "";
             }
         }
     }
@@ -193,13 +214,18 @@ public partial class MainPage : ContentPage
         var clipBoardText = await Clipboard.Default.GetTextAsync();
     }
 
-    private  void ContentPage_Focused(object sender, FocusEventArgs e)
+    private void ContentPage_Focused(object sender, FocusEventArgs e)
     {
-        
+
     }
     private async void Clipboard_ClipboardContainTiktokLink(object sender, EventArgs e)
     {
         var clipBoardText = await Clipboard.Default.GetTextAsync();
+    }
+
+    private void PasteClipBorad(object sender, EventArgs e)
+    {
+
     }
 }
 

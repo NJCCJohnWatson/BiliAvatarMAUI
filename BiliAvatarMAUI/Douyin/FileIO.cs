@@ -40,13 +40,13 @@ namespace BiliAvatarMAUI
             {
                 return "";
             }
-        }
+        }        
     }
     public static class Verify
     {
         public static string FilterillegalCharacters(string filname)
         {
-            char[] illegalchars = Path.GetInvalidFileNameChars();
+            char[] illegalchars = Path.GetInvalidFileNameChars(); 
             var filenameChars = filname.ToCharArray();
             foreach (var illegalchar in illegalchars)
             {

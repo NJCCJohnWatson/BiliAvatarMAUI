@@ -33,7 +33,7 @@
                 HorizontalOptions="Center" />
 
             <Label 
-                Text="Current count: 0"
+                Text="请输入抖音分享链接"
                 FontSize="18"
                 FontAttributes="Bold"
                 x:Name="CounterLabel"
@@ -47,15 +47,15 @@
                 Clicked="GetLink"
                 FontAttributes="Bold"          
                 HorizontalOptions="Start"                 
-                Text="获取链接"                
+                Text="视频获取"                
                 />
-            <Button
+            <Button 
                 Clicked="SetDownloadPath"
                 FontAttributes="Bold"          
                 HorizontalOptions="Start"                 
                 Text="设置Path"                
                 />
-            <Button 
+            <!--<Button 
                 Text="Click me"
                 FontAttributes="Bold"
                 SemanticProperties.Hint="Counts the number of times you click"
@@ -67,12 +67,12 @@
                 FontAttributes="Bold"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnClickLoadUrl"
-                HorizontalOptions="Start" Margin="20,0,0,0"/>
-            <Editor
+                HorizontalOptions="Start" Margin="20,0,0,0"/>-->
+            <!--<Editor
             HorizontalOptions="Fill"
                 x:Name="txtServerAdress"
                 AutoSize="TextChanges"
-                />
+                />-->
             <Image
                 SemanticProperties.Description="Cute dot net bot waving hi to you!"
                 WidthRequest="250"
