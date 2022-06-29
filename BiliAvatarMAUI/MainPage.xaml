@@ -2,9 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:drawable="clr-namespace:BiliAvatarMAUI"
-             x:Class="BiliAvatarMAUI.MainPage" 
-             Loaded="ContentPage_Loaded"
-             Focused="ContentPage_Focused">
+             x:Class="BiliAvatarMAUI.MainPage"               
+             >
     <!--<ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
             <MenuFlyoutItem Text="Quit" Command="{Binding QuitCommand}"/>
@@ -28,7 +27,7 @@
             <Label 
                 Text="MAUI CrossPlatform TikTok Donwloader"
                 SemanticProperties.HeadingLevel="Level1"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                SemanticProperties.Description="Welcome to dot net Multi platform App UI"
                 FontSize="18"
                 HorizontalOptions="Center" />
 
@@ -41,13 +40,19 @@
             <Editor             
                 x:Name="txtLink"
                 HorizontalOptions="FillAndExpand" 
-                AutoSize="TextChanges"
-                MinimumWidthRequest="120"/>
+                AutoSize ="TextChanges"                 
+                />
             <Button
                 Clicked="GetLink"
                 FontAttributes="Bold"          
                 HorizontalOptions="Start"                 
                 Text="视频获取"                
+                />
+            <Button
+                Clicked="PasteClipBorad"
+                FontAttributes="Bold"          
+                HorizontalOptions="Start"                 
+                Text="复制链接"                
                 />
             <Button 
                 Clicked="SetDownloadPath"

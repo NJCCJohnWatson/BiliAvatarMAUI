@@ -205,27 +205,19 @@ public partial class MainPage : ContentPage
         var realPath = fi.Directory;
         savingPath = path;
     }
-    private void ContentPage_Loaded(object sender, EventArgs e)
+
+
+    private async Task<string> CopyClipBoard()
     {
-        Clipboard.Default.ClipboardContentChanged += Clipboard_ClipboardContentChanged;
-    }
-    private async void Clipboard_ClipboardContentChanged(object sender, EventArgs e)
-    {
-        var clipBoardText = await Clipboard.Default.GetTextAsync();
+        string clipboardText = await Clipboard.Default.GetTextAsync();
+        return clipboardText;
     }
 
-    private void ContentPage_Focused(object sender, FocusEventArgs e)
-    {
 
-    }
-    private async void Clipboard_ClipboardContainTiktokLink(object sender, EventArgs e)
+    private async void PasteClipBorad(object sender, EventArgs e)
     {
-        var clipBoardText = await Clipboard.Default.GetTextAsync();
+        txtLink.Text = await CopyClipBoard();
     }
 
-    private void PasteClipBorad(object sender, EventArgs e)
-    {
-
-    }
 }
 
