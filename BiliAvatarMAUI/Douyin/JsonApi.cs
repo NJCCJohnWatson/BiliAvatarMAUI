@@ -27,7 +27,7 @@ namespace BiliAvatarMAUI.Douyin
         public Video video { get; set; }
         public object geofencing { get; set; }
         public bool is_live_replay { get; set; }
-        public object images { get; set; }
+        public images[] images { get; set; }
         public long author_user_id { get; set; }
         public string aweme_id { get; set; }
         public string share_url { get; set; }
@@ -253,5 +253,15 @@ namespace BiliAvatarMAUI.Douyin
         public string user_id { get; set; }
         public int type { get; set; }
     }
+
+    public class images
+    {
+        public string uri { get; set; }
+        public string[] url_list { get; set; }
+        public string[] download_url_list { get; set; }
+        public int height { get; set; }
+        public int width { get; set; }
+    }
+
 
 }
