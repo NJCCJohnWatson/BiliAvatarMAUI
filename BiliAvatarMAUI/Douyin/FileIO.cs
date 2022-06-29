@@ -46,7 +46,7 @@ namespace BiliAvatarMAUI
     {
         public static string FilterillegalCharacters(string filname)
         {
-            char[] illegalchars = Path.GetInvalidFileNameChars();
+            char[] illegalchars = Path.GetInvalidFileNameChars(); 
             var filenameChars = filname.ToCharArray();
             foreach (var illegalchar in illegalchars)
             {
