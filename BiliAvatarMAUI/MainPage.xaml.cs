@@ -111,7 +111,7 @@ public partial class MainPage : ContentPage
 
             videoTitle = videoInfo.item_list[0].desc;
 
-            videoUid = videoInfo.item_list[0].video.vid.ToString();
+            videoUid = videoInfo.item_list[0].aweme_id.ToString();
             //foreach (var item in videoInfo)
             //{
             //    if (item.Key.Contains("nwm_video_url_1080p"))
