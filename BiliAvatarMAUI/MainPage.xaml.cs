@@ -81,9 +81,19 @@ public partial class MainPage : ContentPage
         }
         else
         {
-            //string serrverIP = txtServerAdress.Text;
-            //string apiUrl = ("http://" + serrverIP + "/api?url=\"" + linkText + "\"");
             var videoInfo = await douyin.GetVideoInfoByApi(linkText);
+            int? awemeType = videoInfo.item_list.FirstOrDefault().aweme_type;
+            switch (awemeType)
+            {
+                //图集
+                case 2:
+                    break;
+                //
+                case 4:
+                    break;
+                default:
+                    break;
+            }
             //如果返回Json对象为空则跳出
             if (videoInfo == null)
             {
@@ -97,11 +107,11 @@ public partial class MainPage : ContentPage
             string authorUid = string.Empty;
             string videoTitle = string.Empty;
             string videoUid = string.Empty;
+            List<string> picsLis = new List<string>();
 
             video1080p = videoInfo.item_list[0].video.play_addr.url_list[0];
             video1080p = video1080p.Replace("playwm", "play");
             video1080p = video1080p.Replace("720p", "1080p");
-            //var resp = douyin.WebIO.GetUrl(video1080p);
 
             videoUrl = videoInfo.item_list[0].video.play_addr.url_list[0].Replace("playwm", "play");
 
@@ -112,31 +122,7 @@ public partial class MainPage : ContentPage
             videoTitle = videoInfo.item_list[0].desc;
 
             videoUid = videoInfo.item_list[0].aweme_id.ToString();
-            //foreach (var item in videoInfo)
-            //{
-            //    if (item.Key.Contains("nwm_video_url_1080p"))
-            //    {
-            //        video1080p = item.Value;
-            //    }
-            //    if (item.Key.Contains("nwm_video_url") && item.Key == "nwm_video_url")
-            //    {
-            //        videoUrl = item.Value;
-            //    }
-            //    if (item.Key.Contains("video_author_uid"))
-            //    {
-            //        authorUid = item.Value;
-            //    }
-            //    if (item.Key.Contains("video_author") && item.Key == "video_author")
-            //    {
-            //        authorName = item.Value;
-            //    }
-            //    if (item.Key.Contains("video_title"))
-            //    {
-            //        videoTitle = item.Value;
-            //    }
-            //}
             #endregion
-            //string picpath = FileIO.TakePath().Result;
             var MyPictures = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
             DirectoryInfo downloadFullPath = MyPictures;
             if (MyPictures.Exists)
@@ -188,7 +174,7 @@ public partial class MainPage : ContentPage
                     CounterLabel.Text = "下载失败，请检查链接";
                 }
             }
-           else
+            else
             {
                 CounterLabel.Text = "该视频下载已完成";
                 txtLink.Text = "";
