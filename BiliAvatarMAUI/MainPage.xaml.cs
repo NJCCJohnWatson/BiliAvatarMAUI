@@ -10,6 +10,11 @@ namespace BiliAvatarMAUI;
 public partial class MainPage : ContentPage
 {
     int count = 0;
+
+    enum ContentType
+    {
+        Pictures = 2, Video = 4
+    };
     DouyinApi douyin = new DouyinApi();
     bool IsAndroid() =>
     DeviceInfo.Current.Platform == DevicePlatform.Android;
@@ -83,23 +88,7 @@ public partial class MainPage : ContentPage
         {
             var videoInfo = await douyin.GetVideoInfoByApi(linkText);
             int? awemeType = videoInfo.item_list.FirstOrDefault().aweme_type;
-            switch (awemeType)
-            {
-                //图集
-                case 2:
-                    break;
-                //
-                case 4:
-                    break;
-                default:
-                    break;
-            }
-            //如果返回Json对象为空则跳出
-            if (videoInfo == null)
-            {
-                CounterLabel.Text = "链接获取失败，请检查分享链接";
-                return;
-            }
+
             #region Construct video file name
             string video1080p = string.Empty;
             string videoUrl = string.Empty;
@@ -122,7 +111,32 @@ public partial class MainPage : ContentPage
             videoTitle = videoInfo.item_list[0].desc;
 
             videoUid = videoInfo.item_list[0].aweme_id.ToString();
+
+            var imagesArray = videoInfo.item_list[0].images.Reverse().ToList();
+
+            //Find highest pixel picture
+            var hugePicSet = imagesArray.MaxBy(x => x.height * x.width);
+
+            var imageUrls = hugePicSet.url_list;
             #endregion
+            switch (awemeType)
+            {
+                //图集
+                case 2:
+                    break;
+                //
+                case 4:
+                    break;
+                default:
+                    break;
+            }
+            //如果返回Json对象为空则跳出
+            if (videoInfo == null)
+            {
+                CounterLabel.Text = "链接获取失败，请检查分享链接";
+                return;
+            }
+           
             var MyPictures = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
             DirectoryInfo downloadFullPath = MyPictures;
             if (MyPictures.Exists)
@@ -191,7 +205,10 @@ public partial class MainPage : ContentPage
         var realPath = fi.Directory;
         savingPath = path;
     }
-
+    //private async Task<bool> DownloadContent(ContentType type,string filepath)
+    //{
+    //    bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
+    //}
 
     private async Task<string> CopyClipBoard()
     {
