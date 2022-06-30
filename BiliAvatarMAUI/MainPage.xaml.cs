@@ -96,7 +96,7 @@ public partial class MainPage : ContentPage
             string authorUid = string.Empty;
             string videoTitle = string.Empty;
             string videoUid = string.Empty;
-            List<string> picsLis = new List<string>();
+            List<images> imagesArray = new List<images>();
 
             video1080p = videoInfo.item_list[0].video.play_addr.url_list[0];
             video1080p = video1080p.Replace("playwm", "play");
@@ -112,31 +112,16 @@ public partial class MainPage : ContentPage
 
             videoUid = videoInfo.item_list[0].aweme_id.ToString();
 
-            var imagesArray = videoInfo.item_list[0].images.Reverse().ToList();
 
-            //Find highest pixel picture
-            var hugePicSet = imagesArray.MaxBy(x => x.height * x.width);
 
-            var imageUrls = hugePicSet.url_list;
             #endregion
-            switch (awemeType)
-            {
-                //图集
-                case 2:
-                    break;
-                //
-                case 4:
-                    break;
-                default:
-                    break;
-            }
             //如果返回Json对象为空则跳出
             if (videoInfo == null)
             {
                 CounterLabel.Text = "链接获取失败，请检查分享链接";
                 return;
             }
-           
+
             var MyPictures = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
             DirectoryInfo downloadFullPath = MyPictures;
             if (MyPictures.Exists)
@@ -170,29 +155,57 @@ public partial class MainPage : ContentPage
             }
             authorName = Verify.FilterillegalCharacters(authorName);
             videoTitle = Verify.FilterillegalCharacters(videoTitle);
-            string filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + ".mp4");
-            //filepath = Verify.FilterillegalCharacters(filepath);
 
-            //FileIO.WriteBinaryToFile(filepath, resp);
-            //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
-            if (!File.Exists(filepath))
+            string filepath = string.Empty;
+            switch (awemeType)
             {
-                bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
-                if (result)
-                {
-                    CounterLabel.Text = "下载成功：" + filepath;
-                    txtLink.Text = "";
-                }
-                else
-                {
-                    CounterLabel.Text = "下载失败，请检查链接";
-                }
+                //图集
+                case 2:                    
+                    imagesArray = videoInfo.item_list[0].images.Reverse().ToList();
+                    //Find highest pixel picture 
+                    //var hugePicSet = imagesArray.MaxBy(x => x.height * x.width);
+                    //
+                    var imageUrls = imagesArray.Select(x => x.url_list.First());
+                    var imageDownloadPathList = new List<string>();
+                    int picIndex = 1;
+                    foreach (var url in imageUrls)
+                    {
+                        filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + "-" + picIndex.ToString() + ".png");
+                        //imageDownloadPathList.Add(filepath);
+                        bool result = await douyin.DownloadVideo(url, filepath);
+                       picIndex++;
+                    }
+                    break;
+                //视频
+                case 4:
+                    filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + ".mp4");
+                    //filepath = Verify.FilterillegalCharacters(filepath);
+
+                    //FileIO.WriteBinaryToFile(filepath, resp);
+                    //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
+                    if (!File.Exists(filepath))
+                    {
+                        bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
+                        if (result)
+                        {
+                            CounterLabel.Text = "下载成功：" + filepath;
+                            txtLink.Text = "";
+                        }
+                        else
+                        {
+                            CounterLabel.Text = "下载失败，请检查链接";
+                        }
+                    }
+                    else
+                    {
+                        CounterLabel.Text = "该视频下载已完成";
+                        txtLink.Text = "";
+                    }
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                CounterLabel.Text = "该视频下载已完成";
-                txtLink.Text = "";
-            }
+
         }
     }
 
