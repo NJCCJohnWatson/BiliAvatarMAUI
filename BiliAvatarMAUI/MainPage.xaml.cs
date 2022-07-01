@@ -20,6 +20,8 @@ public partial class MainPage : ContentPage
     DeviceInfo.Current.Platform == DevicePlatform.Android;
     bool IsWindows() =>
         DeviceInfo.Current.Platform == DevicePlatform.WinUI;
+    bool IsiOS()=>
+        DeviceInfo.Current.Platform==DevicePlatform.iOS;
     string savingPath = String.Empty;
     //savingPath= @"/storage/emulated/0/Pictures/DouyinDownload";
 
@@ -162,19 +164,25 @@ public partial class MainPage : ContentPage
                 //图集
                 case 2:                    
                     imagesArray = videoInfo.item_list[0].images.Reverse().ToList();
-                    //Find highest pixel picture 
-                    //var hugePicSet = imagesArray.MaxBy(x => x.height * x.width);
-                    //
                     var imageUrls = imagesArray.Select(x => x.url_list.First());
-                    var imageDownloadPathList = new List<string>();
                     int picIndex = 1;
                     foreach (var url in imageUrls)
                     {
                         filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + "-" + picIndex.ToString() + ".png");
-                        //imageDownloadPathList.Add(filepath);
-                        bool result = await douyin.DownloadVideo(url, filepath);
-                       picIndex++;
+                        if(!File.Exists(filepath))
+                        {
+                            bool result = await douyin.DownloadContent(url, filepath);
+
+                        }
+                        else
+                        {
+                            CounterLabel.Text = "该图片下载已完成";
+                            txtLink.Text = "";
+                        }
+                        picIndex++;
                     }
+                    CounterLabel.Text = "下载成功：" + filepath;
+                    txtLink.Text = "";
                     break;
                 //视频
                 case 4:
@@ -185,7 +193,7 @@ public partial class MainPage : ContentPage
                     //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
                     if (!File.Exists(filepath))
                     {
-                        bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
+                        bool result = await douyin.DownloadContent(video1080p != string.Empty ? video1080p : videoUrl, filepath);
                         if (result)
                         {
                             CounterLabel.Text = "下载成功：" + filepath;

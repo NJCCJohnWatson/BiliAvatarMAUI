@@ -22,7 +22,7 @@ namespace BiliAvatarMAUI.Douyin
         WebIO webIO = new WebIO();
         string api_link_video = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=";
 
-        public async Task<bool> DownloadVideo(string url, string filepath)
+        public async Task<bool> DownloadContent(string url, string filepath)
         {
             string error = string.Empty;
             if (!string.IsNullOrEmpty(url))
