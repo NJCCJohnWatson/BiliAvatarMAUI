@@ -20,8 +20,8 @@ public partial class MainPage : ContentPage
     DeviceInfo.Current.Platform == DevicePlatform.Android;
     bool IsWindows() =>
         DeviceInfo.Current.Platform == DevicePlatform.WinUI;
-    bool IsiOS()=>
-        DeviceInfo.Current.Platform==DevicePlatform.iOS;
+    bool IsiOS() =>
+        DeviceInfo.Current.Platform == DevicePlatform.iOS;
     string savingPath = String.Empty;
     //savingPath= @"/storage/emulated/0/Pictures/DouyinDownload";
 
@@ -81,6 +81,7 @@ public partial class MainPage : ContentPage
 
     private async void GetLink(object sender, EventArgs e)
     {
+        var getLinkButton = sender as Button;
         var linkText = txtLink.Text;
         if (linkText == null || string.IsNullOrWhiteSpace(linkText))
         {
@@ -88,6 +89,7 @@ public partial class MainPage : ContentPage
         }
         else
         {
+            getLinkButton.IsEnabled = false;
             var videoInfo = await douyin.GetVideoInfoByApi(linkText);
             int? awemeType = videoInfo.item_list.FirstOrDefault().aweme_type;
 
@@ -121,6 +123,7 @@ public partial class MainPage : ContentPage
             if (videoInfo == null)
             {
                 CounterLabel.Text = "链接获取失败，请检查分享链接";
+                getLinkButton.IsEnabled = true;
                 return;
             }
 
@@ -162,14 +165,14 @@ public partial class MainPage : ContentPage
             switch (awemeType)
             {
                 //图集
-                case 2:                    
+                case 2:
                     imagesArray = videoInfo.item_list[0].images.Reverse().ToList();
                     var imageUrls = imagesArray.Select(x => x.url_list.First());
                     int picIndex = 1;
                     foreach (var url in imageUrls)
                     {
                         filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + "-" + picIndex.ToString() + ".png");
-                        if(!File.Exists(filepath))
+                        if (!File.Exists(filepath))
                         {
                             bool result = await douyin.DownloadContent(url, filepath);
 
@@ -213,6 +216,7 @@ public partial class MainPage : ContentPage
                 default:
                     break;
             }
+            getLinkButton.IsEnabled = true;
 
         }
     }
@@ -222,9 +226,12 @@ public partial class MainPage : ContentPage
         FileIO fs = new FileIO();
         string path = await fs.TakePath();
         CounterLabel.Text = path;
-        FileInfo fi = new FileInfo(path);
-        var realPath = fi.Directory;
-        savingPath = path;
+        if (!string.IsNullOrEmpty(path))
+        {
+            FileInfo fi = new FileInfo(path);
+            var realPath = fi.Directory;
+            savingPath = path;
+        }
     }
     //private async Task<bool> DownloadContent(ContentType type,string filepath)
     //{

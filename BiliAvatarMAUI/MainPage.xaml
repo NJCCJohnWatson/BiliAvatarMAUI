@@ -40,7 +40,7 @@
             <Editor             
                 x:Name="txtLink"
                 HorizontalOptions="FillAndExpand" 
-                AutoSize ="TextChanges"                 
+                AutoSize ="TextChanges"           
                 />
             <Button
                 Clicked="GetLink"
