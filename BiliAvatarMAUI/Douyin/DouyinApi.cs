@@ -37,7 +37,7 @@ namespace BiliAvatarMAUI.Douyin
                     await Fs.WriteBinaryToFile(filepath, videoBytes);
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     return false;
                 }

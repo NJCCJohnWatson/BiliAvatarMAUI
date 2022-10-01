@@ -41,6 +41,21 @@ namespace BiliAvatarMAUI
                 return "";
             }
         }        
+        public async Task<bool>CheckPathIsCanBeSavedByOpenOrCreateFile(string path)
+        {
+            string filePath = Path.Combine(path, ".test.cc");
+            try
+            {
+                using (FileStream fs = File.Open(filePath, FileMode.OpenOrCreate))
+                {
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
     public static class Verify
     {

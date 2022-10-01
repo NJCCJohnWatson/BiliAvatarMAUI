@@ -135,8 +135,10 @@ public partial class MainPage : ContentPage
             }
             if (IsAndroid())
             {
+                PermissionStatus statusread = await Permissions.RequestAsync<Permissions.StorageRead>();
+                PermissionStatus statuswrite = await Permissions.RequestAsync<Permissions.StorageWrite>();
                 var Movies = FileSystem.Current.AppDataDirectory;
-                //savingPath = @"/storage/emulated/0/Pictures";
+                savingPath = @"/storage/emulated/0/Pictures";
                 if (!Directory.Exists(savingPath))
                 {
                     //var folderSave = Directory.CreateDirectory(Path.Combine(savingPath, "save"));
@@ -146,6 +148,31 @@ public partial class MainPage : ContentPage
                     //    //File.Copy(brokeVideo,)
                     //}
                     savingPath = Movies;
+                }
+                else
+                {
+                   var newsavingPath = Path.Combine(savingPath, "douyindownload");
+                    if (Directory.Exists(newsavingPath))
+                    {
+                        savingPath = newsavingPath;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(newsavingPath);
+                            savingPath = newsavingPath;
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                }
+                FileIO fs = new FileIO();
+                if(!fs.CheckPathIsCanBeSavedByOpenOrCreateFile(savingPath).Result)
+                {
+                    savingPath = FileSystem.Current.AppDataDirectory;
                 }
             }
             if (IsWindows())
