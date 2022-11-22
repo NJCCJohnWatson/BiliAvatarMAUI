@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using BiliAvatarMAUI.Services.PartialMethods;
 using System.Runtime.Versioning;
 
 namespace BiliAvatarMAUI;
@@ -11,6 +12,7 @@ public class MainActivity : MauiAppCompatActivity
 {
     protected override void OnCreate(Bundle savedInstanceState)
     {
+        //base.OnCreate(savedInstanceState);
         try
         {
             if (!Android.OS.Environment.IsExternalStorageManager)
@@ -27,5 +29,6 @@ public class MainActivity : MauiAppCompatActivity
         {
             base.OnCreate(savedInstanceState);
         }
+        DeviceOrientationService.Init(this);
     }
 }

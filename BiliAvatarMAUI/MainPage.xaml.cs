@@ -4,6 +4,9 @@ using IImage = Microsoft.Maui.Graphics.IImage;
 using Microsoft.Maui.Graphics;
 using System.Drawing;
 using BiliAvatarMAUI.Douyin;
+using InvokePlatformCodeDemos.Services;
+using BiliAvatarMAUI.Services.PartialMethods;
+using BiliAvatarMAUI.Services;
 
 namespace BiliAvatarMAUI;
 
@@ -248,8 +251,25 @@ public partial class MainPage : ContentPage
         }
     }
 
+    //[ICommand]
     private async void SetDownloadPath(object sender, EventArgs e)
     {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        sb.AppendLine($"Pixel width: {DeviceDisplay.Current.MainDisplayInfo.Width} / Pixel Height: {DeviceDisplay.Current.MainDisplayInfo.Height}");
+        sb.AppendLine($"Density: {DeviceDisplay.Current.MainDisplayInfo.Density}");
+        sb.AppendLine($"Orientation: {DeviceDisplay.Current.MainDisplayInfo.Orientation}");
+        sb.AppendLine($"Rotation: {DeviceDisplay.Current.MainDisplayInfo.Rotation}");
+        sb.AppendLine($"Refresh Rate: {DeviceDisplay.Current.MainDisplayInfo.RefreshRate}");
+
+        DisplayDetailsLabel.Text = sb.ToString();
+
+        //DeviceOrientationService deviceOrientationService = new DeviceOrientationService();
+        //DeviceOrientation orientation = deviceOrientationService.GetOrientation();
+        DeviceOrientationService.SetOrientation(DeviceOrientation.Portrait);
+
+
+        //DeviceDisplay.MainDisplayInfo.Orientation = DisplayOrientation.Portrait;
         FileIO fs = new FileIO();
         string path = await fs.TakePath();
         CounterLabel.Text = path;

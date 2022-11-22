@@ -60,6 +60,9 @@
                 HorizontalOptions="Start"                 
                 Text="设置Path"                
                 />
+            <Label 
+                x:Name="DisplayDetailsLabel"                       
+                   />
             <!--<Button 
                 Text="Click me"
                 FontAttributes="Bold"
