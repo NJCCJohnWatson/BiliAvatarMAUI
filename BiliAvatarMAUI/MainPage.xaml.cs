@@ -101,6 +101,8 @@ public partial class MainPage : ContentPage
             catch (Exception ex) 
             {
                 DisplayDetailsLabel.Text = ex.Message;
+                txtLink.Text = string.Empty;
+                getLinkButton.IsEnabled = true;
                 return;
             }
             int? awemeType = videoInfo.item_list.FirstOrDefault().aweme_type;

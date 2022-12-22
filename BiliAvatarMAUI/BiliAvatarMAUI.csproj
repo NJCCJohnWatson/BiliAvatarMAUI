@@ -42,6 +42,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
     <AndroidUseAapt2>True</AndroidUseAapt2>
     <AndroidKeyStore>True</AndroidKeyStore>
+	<AndroidSigningKeyStore>myapp.keystore</AndroidSigningKeyStore> <!--在上一部分中创建的密钥存储文件：myapp.keystore-->
+	<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias> <!--传递给 keytool 工具的参数值：键-->
+	<AndroidSigningKeyPass>fuckMAUI</AndroidSigningKeyPass> <!--创建密钥存储文件时提供的密码-->
+	<AndroidSigningStorePass>fuckMAUI</AndroidSigningStorePass> <!--创建密钥存储文件时提供的密码-->
   </PropertyGroup>
 
   <ItemGroup>
