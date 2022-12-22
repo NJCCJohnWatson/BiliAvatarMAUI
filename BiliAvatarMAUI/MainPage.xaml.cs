@@ -93,7 +93,16 @@ public partial class MainPage : ContentPage
         else
         {
             getLinkButton.IsEnabled = false;
-            var videoInfo = await douyin.GetVideoInfoByApi(linkText);
+            var videoInfo = new WebApiV2ByID();
+            try
+            {
+                videoInfo = await douyin.GetVideoInfoByApi(linkText);
+            }
+            catch (Exception ex) 
+            {
+                DisplayDetailsLabel.Text = ex.Message;
+                return;
+            }
             int? awemeType = videoInfo.item_list.FirstOrDefault().aweme_type;
 
             #region Construct video file name
