@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace BiliAvatarMAUI
 {
-    internal class WebIO
+    public static class WebIO
     {//handler.AllowAutoRedirect=false;
-        HttpClient client = new HttpClient(new HttpClientHandler()
+        private static HttpClient client = new HttpClient(new HttpClientHandler()
         {
             AllowAutoRedirect = true
         });
-        public HttpClient Client { get => client; set => client = value; }
+        public static HttpClient Client { get => client; set => client = value; }
 
-        public async Task<HttpResponseMessage> GetUrl(string url)
+        public static async Task<HttpResponseMessage> GetUrl(string url)
         {
             Client.DefaultRequestHeaders.Add("user-agent"
                   , "'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) " +
@@ -23,12 +23,19 @@ namespace BiliAvatarMAUI
             var resp = await Client.GetAsync(url);
             return resp;
         }
-        public async Task<HttpResponseMessage> GetUrl(string url,string headerName,string headerValue)
+        public static async Task<HttpResponseMessage> GetUrl(string url, string headerName, string headerValue)
         {
             Client.DefaultRequestHeaders.Add(headerName
                   , headerValue);
             var resp = await Client.GetAsync(url);
             return resp;
+        }
+        public static Uri ReturnActualUrl(HttpResponseMessage res)
+        {
+            var orginUrl = res.StatusCode.ToString().Equals("OK")
+                                ? (res.RequestMessage is not null ? res.RequestMessage.RequestUri : null)
+                                : null;
+            return orginUrl;
         }
     }
 }

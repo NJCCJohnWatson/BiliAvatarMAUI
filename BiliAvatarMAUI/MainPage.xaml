@@ -108,6 +108,16 @@
                 VerticalOptions="End" 
                 MaximumHeightRequest="300" 
                 IsVisible="False"/>
+            <StackLayout Orientation="Vertical">
+                <Editor x:Name="txtApiFeild"
+                        HorizontalOptions="Center" 
+                        VerticalOptions="End"                     
+                    />
+                <Button x:Name="btn_SaveApi"
+                        Text="保存"
+                        Clicked="btn_SaveApi_Clicked"
+                        />
+            </StackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
