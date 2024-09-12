@@ -14,6 +14,10 @@ using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.VisualBasic;
 using System.Text.Json.Serialization;
 using FileSystem = Microsoft.Maui.Storage.FileSystem;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
+using Tomlyn;
 
 namespace BiliAvatarMAUI;
 
@@ -34,6 +38,7 @@ public partial class MainPage : ContentPage
         DeviceInfo.Current.Platform == DevicePlatform.iOS;
     string savingPath = String.Empty;
     //savingPath= @"/storage/emulated/0/Pictures/DouyinDownload";
+    public string apiUri = string.Empty;
 
     public MainPage()
     {
@@ -109,7 +114,7 @@ public partial class MainPage : ContentPage
                 case MediaType.SourceSiteType.Unknown:
                     break;
                 case MediaType.SourceSiteType.Douyin:
-                    await DouyinDownload(sender,actualUrl.AbsoluteUri);
+                    await DouyinDownload(sender, actualUrl.AbsoluteUri);
                     break;
                 case MediaType.SourceSiteType.Bilibli:
                     await BiliDynamicDownload(actualUrl.AbsoluteUri);
@@ -171,7 +176,7 @@ public partial class MainPage : ContentPage
     {
         txtLink.Text = await CopyClipBoard();
     }
-    private async Task DouyinDownload(object sender,string Douyinsharelink)
+    private async Task DouyinDownload(object sender, string Douyinsharelink)
     {
         var getLinkButton = sender as Button;
         //var linkText =Douyinsharelink;
@@ -205,7 +210,7 @@ public partial class MainPage : ContentPage
         //videoUrl = videoInfo.aweme_detail.video.play_addr.url_list[0].Replace("playwm", "play");
         string video720p = videoInfo.aweme_detail.video.bit_rate[0].play_addr.url_list[0];
         string videodefualt = videoInfo.aweme_detail.video.play_addr.url_list[0];
-        if(!string.IsNullOrEmpty(video720p))
+        if (!string.IsNullOrEmpty(video720p))
         {
             videoUrl = video720p;
         }
@@ -355,10 +360,27 @@ public partial class MainPage : ContentPage
         Uri biliUri = new Uri(uri);
         var biliPath = biliUri.AbsolutePath;
         var dynamicUUID = biliPath.Split('/').Last();
-        var dynamicDetail = string.Concat(BilibiliApi.BiliQueryApi.Dynamic_detail, dynamicUUID);
-        var dynamicresp = await WebIO.Client.GetStringAsync(dynamicDetail);
+        var dynamicDtUriBd = new UriBuilder(apiUri);
+        dynamicDtUriBd.Path = "bili";
+        dynamicDtUriBd.Query = $"dynamicId={dynamicUUID}";
+        //var dynamicDtUri = dynamicDtUriBd.Uri;
+        //var dynamicDetail = string.Concat(BilibiliApi.BiliQueryApi.Dynamic_detail, dynamicUUID);
+        var dynamicresp = await WebIO.Client.GetStringAsync(dynamicDtUriBd.Uri.OriginalString);
+        //var baseAddress = new Uri(BilibiliApi.BiliQueryApi.Dynamic_detail);
+        //using (var handler = new HttpClientHandler { UseCookies = true })
+        //using (var client = new HttpClient(handler) { BaseAddress = baseAddress })
+        //{
+        //    var message = new HttpRequestMessage(HttpMethod.Get, dynamicUUID);
+        //    message.Headers.Add("Cookie", "51296503,1721507837,abf7b*11CjABnrEpyqRX-H8z5eFGOMBIkvyR98tkvnHA3T9MJkA-dXWJzAOq8dBF2on15n9peHASVmstOHk5U2hRYV92QWp0WjJWbDh4VmxvMjRBbUNRSS1CUS1wVVM5WWsxRnRBY3B2dHFsM0YyRlRDcFZUdTQ2aUgwYVF1NzRpUms3MFdMcW1yY25OVVBBIIEC");
+        //    var result = await client.GetStringAsync(dynamicDetail);
+            //result.EnsureSuccessStatusCode();
+            //var con = result.Content;
+            //var c = client.
+            //var getress = await client.GetAsync(dynamicDetail,)
+        //}
         BilibiliApi.DynamicCard.DynamicExtendCard dynmaicCardInfo = null;
         BilibiliApi.Dynamic.Dynamic_Detail_Model dynamicdetailInfo = null;
+        BilibiliApi.dynamicMainInfo  dynamicMainInfo = null;
         try
         {
 
@@ -368,27 +390,23 @@ public partial class MainPage : ContentPage
             };
 
 
-
-            dynamicdetailInfo = JsonSerializer.Deserialize<BilibiliApi.Dynamic.Dynamic_Detail_Model>(dynamicresp, options);
-            var dynamicCardJsonStr = dynamicdetailInfo.data.card.card;
-            dynmaicCardInfo = JsonSerializer.Deserialize<BilibiliApi.DynamicCard.DynamicExtendCard>(dynamicCardJsonStr, options);
+             dynamicMainInfo = JsonSerializer.Deserialize<BilibiliApi.dynamicMainInfo>(dynamicresp, options);
+            //dynamicdetailInfo = JsonSerializer.Deserialize<BilibiliApi.Dynamic.Dynamic_Detail_Model>(dynamicresp, options);
+            //var dynamicCardJsonStr = dynamicdetailInfo?.data?.card?.card;
+            //dynmaicCardInfo = JsonSerializer.Deserialize<BilibiliApi.DynamicCard.DynamicExtendCard>(dynamicCardJsonStr, options);
         }
         catch (Exception jsonEx)
         {
             return;
         }
         IEnumerable<string> pictureList = null;
-        if (dynmaicCardInfo.item.pictures != null)
+        if(dynamicMainInfo.picUris!=null)
         {
-            pictureList = dynmaicCardInfo.item.pictures.Select(x => x.img_src);
-        }
-        else
-        {
-            return;
+            pictureList = dynamicMainInfo.picUris;
         }
         var savingPath = string.Empty;
-        var authorUid = dynamicdetailInfo.data.card.desc.uid;
-        var authorName = dynamicdetailInfo.data.card.desc.user_profile.info.uname;
+        var authorUid = dynamicMainInfo.authorId;
+        var authorName = dynamicMainInfo.authorName;
         authorName = Verify.FilterillegalCharacters(authorName);
         var videoUid = dynamicUUID;
         var MyPictures = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
@@ -477,7 +495,7 @@ public partial class MainPage : ContentPage
 
     private async void btn_SaveApi_Clicked(object sender, EventArgs e)
     {
-        
+
     }
     private async void GetConfigApi()
     {
@@ -509,10 +527,10 @@ public partial class MainPage : ContentPage
         if (!string.IsNullOrEmpty(apiConfigText))
         {
 
-            var apiUri = string.Empty;
             try
             {
-                apiUri = apiConfigText;
+                var configModel = Toml.ToModel(apiConfigText);
+                apiUri = configModel["apiUri"].ToString();
             }
             catch
             {

@@ -9,6 +9,26 @@ namespace BiliAvatarMAUI.MediaConvert.Bilibili
 {
     public class BilibiliApi
     {
+        public class dynamicMainInfo
+        {
+            /// <summary>
+            /// 上传者Id
+            /// </summary>
+            public string authorId { get; set; }
+            /// <summary>
+            /// 上传者名称
+            /// </summary>
+            public string authorName { get; set; }
+            /// <summary>
+            /// 动态Id
+            /// </summary>
+            public string dynamicId { get; set; }
+            /// <summary>
+            /// 图片地址
+            /// </summary>
+            public string[] picUris { get; set; }
+
+        }
         public static class BiliQueryApi
         {
             private static string get_dynamic_detail = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=";
