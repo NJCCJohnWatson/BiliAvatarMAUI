@@ -180,7 +180,7 @@ public partial class MainPage : ContentPage
     {
         var getLinkButton = sender as Button;
         //var linkText =Douyinsharelink;
-        var videoInfo = new ApiJsonModelContainer.ApiJsonModel_v1Detail();
+        var videoInfo = new DouyinVideoModel();
         try
         {
             videoInfo = await douyin.GetVideoInfoByApi(Douyinsharelink, txtApiFeild.Text);
@@ -192,7 +192,7 @@ public partial class MainPage : ContentPage
             getLinkButton.IsEnabled = true;
             return;
         }
-        int? awemeType = videoInfo.aweme_detail.aweme_type;
+        int? awemeType = videoInfo.data.aweme_detail.aweme_type;
 
         #region Construct video file name
         string video1080p = string.Empty;
@@ -203,13 +203,13 @@ public partial class MainPage : ContentPage
         string videoUid = string.Empty;
         List<images> imagesArray = new List<images>();
 
-        video1080p = videoInfo.aweme_detail.video.play_addr.url_list[0];
+        video1080p = videoInfo.data.aweme_detail.video.play_addr.url_list[0];
         //video1080p = video1080p.Replace("playwm", "play");
         //video1080p = video1080p.Replace("720p", "1080p");
 
         //videoUrl = videoInfo.aweme_detail.video.play_addr.url_list[0].Replace("playwm", "play");
-        string video720p = videoInfo.aweme_detail.video.bit_rate[0].play_addr.url_list[0];
-        string videodefualt = videoInfo.aweme_detail.video.play_addr.url_list[0];
+        string video720p = videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list.Last();
+        string videodefualt = videoInfo.data.aweme_detail.video.play_addr.url_list[0];
         if (!string.IsNullOrEmpty(video720p))
         {
             videoUrl = video720p;
@@ -219,13 +219,13 @@ public partial class MainPage : ContentPage
             videoUrl = videodefualt;
         }
 
-        authorUid = videoInfo.aweme_detail.author_user_id.ToString();
+        authorUid = videoInfo.data.aweme_detail.author_user_id.ToString();
 
-        authorName = videoInfo.aweme_detail.author.nickname;
+        authorName = videoInfo.data.aweme_detail.author.nickname;
 
-        videoTitle = videoInfo.aweme_detail.desc;
+        videoTitle = videoInfo.data.aweme_detail.desc;
 
-        videoUid = videoInfo.aweme_detail.aweme_id.ToString();
+        videoUid = videoInfo.data.aweme_detail.aweme_id.ToString();
 
 
 

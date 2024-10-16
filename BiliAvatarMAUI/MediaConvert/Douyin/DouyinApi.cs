@@ -51,7 +51,7 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
 
         }
 
-        public async Task<ApiJsonModelContainer.ApiJsonModel_v1Detail> GetVideoInfoByApi(string shareCode,string apiLink = "")
+        public async Task<DouyinVideoModel> GetVideoInfoByApi(string shareCode,string apiLink = "")
         {
             //var url = GetUrlFromShareCode(shareCode);
             if (string.IsNullOrEmpty(shareCode))
@@ -62,8 +62,11 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
             {
                 //获取视频ID
                 var videoId = await GetVideoIdFromUrl(shareCode);
+#if DEBUG
+                videoId = "7425226048335367475";
+#endif
                 //构建视频API链接
-                var videoApiUrl = apiLink + videoId + "&aid=1128&version_name=23.5.0";
+                var videoApiUrl = $"{apiLink}?aweme_id={videoId}";
                 //获取返回字符串;
                 Client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36 Edg/87.0.664.66");
                 var responseStr = await Client.GetStringAsync(videoApiUrl);
@@ -98,7 +101,7 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
                 //string result = httpResponseMessage.Content.ReadAsStringAsync().Result;
                 #endregion
 
-                var apijson = System.Text.Json.JsonSerializer.Deserialize<ApiJsonModelContainer.ApiJsonModel_v1Detail>(responseStr);
+                var apijson = System.Text.Json.JsonSerializer.Deserialize<DouyinVideoModel>(responseStr);
                 return apijson;
 
 

@@ -110,7 +110,8 @@
                 IsVisible="False"/>
             <StackLayout Orientation="Vertical">
                 <Editor x:Name="txtApiFeild"
-                        HorizontalOptions="Center" 
+                        HorizontalOptions="Fill" 
+                        Margin="20,0,20,0"
                         VerticalOptions="End"                     
                     />
                 <Button x:Name="btn_SaveApi"
