@@ -710,7 +710,7 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
 
     public class Big_Thumbs
     {
-        public int duration { get; set; }
+        public float duration { get; set; }
         public string fext { get; set; }
         public int img_num { get; set; }
         public string img_url { get; set; }

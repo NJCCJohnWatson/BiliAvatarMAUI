@@ -4,28 +4,10 @@
              xmlns:drawable="clr-namespace:BiliAvatarMAUI"
              x:Class="BiliAvatarMAUI.MainPage"               
              >
-    <!--<ContentPage.MenuBarItems>
-        <MenuBarItem Text="File">
-            <MenuFlyoutItem Text="Quit" Command="{Binding QuitCommand}"/>
-        </MenuBarItem>
-        <MenuBarItem Text="Locations">
-            <MenuFlyoutSubItem Text="Change Location">
-                <MenuFlyoutItem Text="Boston, MA"/>
-                <MenuFlyoutItem Text="Redmond, WA"/>
-                <MenuFlyoutItem Text="St. Louis, MO"/>
-            </MenuFlyoutSubItem>
-            <MenuFlyoutItem Text="Add a Location" Command="{Binding AddLocationCommand}"/>
-        </MenuBarItem>
-        <MenuBarItem Text="View">
-            <MenuFlyoutItem Text="Refresh" Command="{Binding RefreshCommand}"/>
-            <MenuFlyoutItem Text="Toggle Light/Dark Mode" Command="{Binding ToggleModeCommand}"/>
-        </MenuBarItem>
-    </ContentPage.MenuBarItems>-->
-
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30">
             <Label 
-                Text="MAUI CrossPlatform TikTok Donwloader"
+                Text="MAUI CrossPlatform TikTok Downloader"
                 SemanticProperties.HeadingLevel="Level1"
                 SemanticProperties.Description="Welcome to dot net Multi platform App UI"
                 FontSize="18"

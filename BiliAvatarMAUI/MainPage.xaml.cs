@@ -39,53 +39,24 @@ public partial class MainPage : ContentPage
     string savingPath = String.Empty;
     //savingPath= @"/storage/emulated/0/Pictures/DouyinDownload";
     public string apiUri = string.Empty;
-
+    public string biliApiUri = string.Empty;
     public MainPage()
     {
         InitializeComponent();
         GetConfigApi();
-        //suckLabel.BindingContext = sld_BitchDeg;
-        //suckLabel.SetBinding(Label.RotationProperty, "Value");
-        //lbl_BitchyDeg.BindingContext = sld_BitchDeg;
-        //lbl_BitchyDeg.SetBinding(Label.TextProperty, "Value");
-        //imgDy.Source = "dage.jpg";
-    }
-
-    private void OnCounterClicked(object sender, EventArgs e)
-    {
-        count++;
-        CounterLabel.Text = $"Current count: {count}";
-
-        SemanticScreenReader.Announce(CounterLabel.Text);
-        LoadImageUrl("https://n.sinaimg.cn/ent/transform/616/w630h786/20191213/2540-ikrsess4946544.jpg", img_ShowToppic);
-        //LoadImageLocal(@"D:\John Watson\Downloads\Telegram Desktop\photo_2022-04-25_19-31-07.jpg", img_ShowToppic);
-    }
-    private void OnClickLoadUrl(object sender, EventArgs e)
-    {
-        //SemanticScreenReader.Announce(CounterLabel.Text);
-        //LoadImageUrl("http://i2.hdslb.com/bfs/face/9265d2d4e5d7a5c2c04bd635ef959d6e461b0d94.jpg", img_ShowToppic);
-
-    }
-    public ICanvas Draw(ICanvas canvas)
-    {
-        return canvas;
     }
     private void LoadImageLocal(string path, Image img)
     {
-        //string curExePath = Environment.ProcessPath;
-        //var exeFi = new FileInfo(curExePath);
-        //var curPath = exeFi.Directory.FullName;
-        //var assetsPath = Path.Combine(curPath, "Assets");
-        //var isAssetsPathExists = Directory.Exists(assetsPath);
-        //var picturePath = Path.Combine(assetsPath, "xxmchain.jpg");
-        var byteArray = File.ReadAllBytes(path);
-        img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
-        //both can use, just for test
-        img = new Image
+        if (File.Exists(path))
         {
-            Source = ImageSource.FromFile(path)
-        };
-        //var s = File.Exists("BiliAvatarMAUI.Assets.xxmchain.jpg");
+            var byteArray = File.ReadAllBytes(path);
+            img.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
+            //both can use, just for test
+            img = new Image
+            {
+                Source = ImageSource.FromFile(path)
+            };
+        }
 
     }
     private void LoadImageUrl(string url, Image img)
@@ -131,7 +102,6 @@ public partial class MainPage : ContentPage
         }
     }
 
-    //[ICommand]
     private async void SetDownloadPath(object sender, EventArgs e)
     {
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -160,10 +130,6 @@ public partial class MainPage : ContentPage
             savingPath = path;
         }
     }
-    //private async Task<bool> DownloadContent(ContentType type,string filepath)
-    //{
-    //    bool result = await douyin.DownloadVideo(video1080p != string.Empty ? video1080p : videoUrl, filepath);
-    //}
 
     private async Task<string> CopyClipBoard()
     {
@@ -360,7 +326,7 @@ public partial class MainPage : ContentPage
         Uri biliUri = new Uri(uri);
         var biliPath = biliUri.AbsolutePath;
         var dynamicUUID = biliPath.Split('/').Last();
-        var dynamicDtUriBd = new UriBuilder(apiUri);
+        var dynamicDtUriBd = new UriBuilder(biliApiUri);
         dynamicDtUriBd.Path = "bili";
         dynamicDtUriBd.Query = $"dynamicId={dynamicUUID}";
         //var dynamicDtUri = dynamicDtUriBd.Uri;
@@ -531,6 +497,7 @@ public partial class MainPage : ContentPage
             {
                 var configModel = Toml.ToModel(apiConfigText);
                 apiUri = configModel["apiUri"].ToString();
+                biliApiUri = configModel["biliApiUri"].ToString();
             }
             catch
             {
