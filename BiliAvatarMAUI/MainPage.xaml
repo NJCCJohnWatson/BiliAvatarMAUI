@@ -94,7 +94,7 @@
                 <Editor x:Name="txtApiFeild"
                         HorizontalOptions="Fill" 
                         Margin="20,0,20,0"
-                        VerticalOptions="End"                     
+                        VerticalOptions="Fill"                     
                     />
                 <Button x:Name="btn_SaveApi"
                         Text="保存"
