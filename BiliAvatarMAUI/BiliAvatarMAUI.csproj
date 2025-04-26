@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
     <OutputType>Exe</OutputType>
@@ -24,7 +24,7 @@
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidUseAapt2>True</AndroidUseAapt2>
       <AndroidKeyStore>True</AndroidKeyStore> <!--设置为 True 对应用进行签名-->
@@ -40,7 +40,7 @@
     <!-- App Icon -->
     <MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#512BD4" />
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\Images\dage.jpg" BaseSize="300,400" />
+    <MauiSplashScreen Include="Resources\Images\dage.jpg" BaseSize="907,1280" />
     <!-- Images -->
     <MauiImage Include="Resources\Images\*" />
     <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
@@ -53,8 +53,8 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />
     <PackageReference Include="Tomlyn" Version="0.17.0" />
   </ItemGroup>
 </Project>
