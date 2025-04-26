@@ -62,9 +62,6 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
             {
                 //获取视频ID
                 var videoId = await GetVideoIdFromUrl(shareCode);
-#if DEBUG
-                videoId = "7425226048335367475";
-#endif
                 //构建视频API链接
                 var videoApiUrl = $"{apiLink}?aweme_id={videoId}";
                 //获取返回字符串;

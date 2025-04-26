@@ -42,8 +42,8 @@ namespace BiliAvatarMAUI
             {
                 return "";
             }
-        }        
-        public async Task<bool>CheckPathIsCanBeSavedByOpenOrCreateFile(string path)
+        }
+        public async Task<bool> CheckPathIsCanBeSavedByOpenOrCreateFile(string path)
         {
             string filePath = Path.Combine(path, ".test.cc");
             try
@@ -63,13 +63,16 @@ namespace BiliAvatarMAUI
     {
         public static string FilterillegalCharacters(string filname)
         {
-            char[] illegalchars = Path.GetInvalidFileNameChars(); 
+            char[] illegalchars = Path.GetInvalidFileNameChars();
             var filenameChars = filname.ToCharArray();
+
             foreach (var illegalchar in illegalchars)
             {
                 if (filname.Contains(illegalchar))
                 {
-                    filname.Remove(illegalchar);
+
+                    filname =  filname.Replace(illegalchar.ToString(),"");
+
                 }
             }
             return ReplaceIlleageChacters(filname);
