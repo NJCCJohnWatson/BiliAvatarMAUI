@@ -169,16 +169,20 @@ public partial class MainPage : ContentPage
         string videoUid = string.Empty;
         List<images> imagesArray = new List<images>();
 
-        video1080p = videoInfo.data.aweme_detail.video.play_addr.url_list[0];
+        //video1080p = videoInfo.data.aweme_detail.video.play_addr.url_list[0];
         //video1080p = video1080p.Replace("playwm", "play");
         //video1080p = video1080p.Replace("720p", "1080p");
 
         //videoUrl = videoInfo.aweme_detail.video.play_addr.url_list[0].Replace("playwm", "play");
-        string video720p = videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list.Last();
+        string videobestBit = videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list.Last();
         string videodefualt = videoInfo.data.aweme_detail.video.play_addr.url_list[0];
-        if (!string.IsNullOrEmpty(video720p))
+        if (!string.IsNullOrEmpty(video1080p))
         {
-            videoUrl = video720p;
+            videoUrl = video1080p;
+        }
+        else if (!string.IsNullOrEmpty(videobestBit))
+        {
+            videoUrl = videobestBit;
         }
         else
         {
@@ -293,14 +297,48 @@ public partial class MainPage : ContentPage
             //    break;
             //视频
             case 0:
+            case 55:
                 filepath = Path.Combine(savingPath, authorUid + "-" + authorName + "-" + videoUid + ".mp4");
                 //filepath = Verify.FilterillegalCharacters(filepath);
 
                 //FileIO.WriteBinaryToFile(filepath, resp);
                 //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "test.mp4");
+                var resc = await douyin.DownloadContent(videodefualt, Path.Combine(savingPath, "videodefualt.mp4"));
                 if (!File.Exists(filepath))
                 {
-                    bool result = await douyin.DownloadContent(video720p != string.Empty ? video720p : videodefualt, filepath);
+                    bool result = await douyin.DownloadContent(videobestBit != string.Empty ? videobestBit : videodefualt, filepath);
+                    #region TestAllTypeOfVideo
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr.url_list[0], Path.Combine(savingPath, "play_addr_0.mp4"));                    
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr.url_list[1], Path.Combine(savingPath, "play_addr_1.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr.url_list[2], Path.Combine(savingPath, "play_addr_2.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+
+
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list[0], Path.Combine(savingPath, "bit_rate_0.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list[1], Path.Combine(savingPath, "bit_rate_1.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.bit_rate[0].play_addr.url_list[2], Path.Combine(savingPath, "bit_rate_2.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+
+
+
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_265.url_list[0], Path.Combine(savingPath, "play_addr_265_0.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_265.url_list[1], Path.Combine(savingPath, "play_addr_265_1.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_265.url_list[2], Path.Combine(savingPath, "play_addr_265_2.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_h264.url_list[0], Path.Combine(savingPath, "play_addr_264_0.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_h264.url_list[1], Path.Combine(savingPath, "play_addr_264_1.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    //await douyin.DownloadContent(videoInfo.data.aweme_detail.video.play_addr_h264.url_list[2], Path.Combine(savingPath, "play_addr_264_2.mp4"));
+                    //await Task.Delay(new Random().Next(1000, 2000));
+                    #endregion
                     if (result)
                     {
                         CounterLabel.Text = "下载成功：" + filepath;
@@ -339,14 +377,14 @@ public partial class MainPage : ContentPage
         //    var message = new HttpRequestMessage(HttpMethod.Get, dynamicUUID);
         //    message.Headers.Add("Cookie", "51296503,1721507837,abf7b*11CjABnrEpyqRX-H8z5eFGOMBIkvyR98tkvnHA3T9MJkA-dXWJzAOq8dBF2on15n9peHASVmstOHk5U2hRYV92QWp0WjJWbDh4VmxvMjRBbUNRSS1CUS1wVVM5WWsxRnRBY3B2dHFsM0YyRlRDcFZUdTQ2aUgwYVF1NzRpUms3MFdMcW1yY25OVVBBIIEC");
         //    var result = await client.GetStringAsync(dynamicDetail);
-            //result.EnsureSuccessStatusCode();
-            //var con = result.Content;
-            //var c = client.
-            //var getress = await client.GetAsync(dynamicDetail,)
+        //result.EnsureSuccessStatusCode();
+        //var con = result.Content;
+        //var c = client.
+        //var getress = await client.GetAsync(dynamicDetail,)
         //}
         BilibiliApi.DynamicCard.DynamicExtendCard dynmaicCardInfo = null;
         BilibiliApi.Dynamic.Dynamic_Detail_Model dynamicdetailInfo = null;
-        BilibiliApi.dynamicMainInfo  dynamicMainInfo = null;
+        BilibiliApi.dynamicMainInfo dynamicMainInfo = null;
         try
         {
 
@@ -356,7 +394,7 @@ public partial class MainPage : ContentPage
             };
 
 
-             dynamicMainInfo = JsonSerializer.Deserialize<BilibiliApi.dynamicMainInfo>(dynamicresp, options);
+            dynamicMainInfo = JsonSerializer.Deserialize<BilibiliApi.dynamicMainInfo>(dynamicresp, options);
             //dynamicdetailInfo = JsonSerializer.Deserialize<BilibiliApi.Dynamic.Dynamic_Detail_Model>(dynamicresp, options);
             //var dynamicCardJsonStr = dynamicdetailInfo?.data?.card?.card;
             //dynmaicCardInfo = JsonSerializer.Deserialize<BilibiliApi.DynamicCard.DynamicExtendCard>(dynamicCardJsonStr, options);
@@ -366,7 +404,7 @@ public partial class MainPage : ContentPage
             return;
         }
         IEnumerable<string> pictureList = null;
-        if(dynamicMainInfo.picUris!=null)
+        if (dynamicMainInfo.picUris != null)
         {
             pictureList = dynamicMainInfo.picUris;
         }
