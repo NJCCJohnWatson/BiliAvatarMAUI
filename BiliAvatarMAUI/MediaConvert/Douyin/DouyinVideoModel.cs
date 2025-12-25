@@ -824,7 +824,7 @@ namespace BiliAvatarMAUI.MediaConvert.Douyin
     public class Video_Tag
     {
         public int level { get; set; }
-        public int tag_id { get; set; }
+        public ulong tag_id { get; set; }
         public string tag_name { get; set; }
     }
 

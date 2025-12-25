@@ -21,7 +21,7 @@
                 HorizontalOptions="Center" />
             <Editor             
                 x:Name="txtLink"
-                HorizontalOptions="FillAndExpand" 
+                HorizontalOptions="Fill" 
                 AutoSize ="TextChanges"           
                 />
             <Button
