@@ -158,6 +158,11 @@ public partial class MainPage : ContentPage
             getLinkButton.IsEnabled = true;
             return;
         }
+        //如果返回Json对象中的视频信息为空则跳出
+        if (videoInfo.data.aweme_detail==null)
+        {
+            return;
+        }
         int? awemeType = videoInfo.data.aweme_detail.aweme_type;
 
         #region Construct video file name
